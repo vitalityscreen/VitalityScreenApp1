@@ -1,4 +1,3 @@
-// Results.jsx
 import { useLocation } from 'react-router-dom';
 
 function Results() {
