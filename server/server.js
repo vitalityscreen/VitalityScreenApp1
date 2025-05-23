@@ -5,23 +5,22 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 
 const app = express();
+const PORT = process.env.PORT || 3000;
 
-// Middleware
 app.use(cors());
 app.use(bodyParser.json());
 
-// Test route
+// Basic test route
 app.get('/api/health', (req, res) => {
   res.json({ message: 'Backend is working!' });
 });
 
-// Handle all other undefined routes
+// Fallback for unmatched routes
 app.use('*', (req, res) => {
-  res.status(404).json({ error: 'Route not found' });
+  res.status(404).json({ error: 'Not Found' });
 });
 
-// Listen on the port provided by Render
-const PORT = process.env.PORT || 3000;
+// Only listen on a port, NOT a URL!
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
