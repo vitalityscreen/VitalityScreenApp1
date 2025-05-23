@@ -1,9 +1,11 @@
-// Survey.jsx (complete updated file)
+// Survey.jsx
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 function Survey() {
   const [questions, setQuestions] = useState([]);
   const [answers, setAnswers] = useState({});
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetch(import.meta.env.VITE_API_URL + '/api/survey')
@@ -21,10 +23,10 @@ function Survey() {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(answers)
     })
-    .then(res => res.json())
-    .then(data => {
-      alert(`Your overall risk level is: ${data.overallRisk}`);
-    });
+      .then(res => res.json())
+      .then(data => {
+        navigate('/results', { state: { results: data } });
+      });
   };
 
   const grouped = questions.reduce((acc, q) => {
