@@ -1,1 +1,0 @@
-function TestResults() { return <h2>Enter Test Results (coming soon)</h2>; } export default TestResults;
