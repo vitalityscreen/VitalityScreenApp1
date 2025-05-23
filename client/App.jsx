@@ -1,23 +1,21 @@
-import React, { useEffect, useState } from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import Navigation from './components/Navigation';
+import Survey from './components/Survey';
+import Dashboard from './components/Dashboard';
+import Actions from './components/Actions';
+import Login from './components/Login';
 
 function App() {
-  const [message, setMessage] = useState('Loading...');
-
-  useEffect(() => {
-    fetch(`${import.meta.env.VITE_API_BASE_URL}/api/ping`)
-      .then((res) => res.json())
-      .then((data) => setMessage(data.message))
-      .catch((err) => {
-        console.error('API error:', err);
-        setMessage('Failed to reach backend');
-      });
-  }, []);
-
   return (
-    <div>
-      <h1>Welcome to VitalityScreen</h1>
-      <p>{message}</p>
-    </div>
+    <Router>
+      <Navigation />
+      <Routes>
+        <Route path="/" element={<Login />} />
+        <Route path="/survey" element={<Survey />} />
+        <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/actions" element={<Actions />} />
+      </Routes>
+    </Router>
   );
 }
 
