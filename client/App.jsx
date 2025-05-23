@@ -4,6 +4,7 @@ import Survey from './components/Survey';
 import Dashboard from './components/Dashboard';
 import Actions from './components/Actions';
 import Login from './components/Login';
+import TestResults from './components/TestResults';
 
 function App() {
   return (
@@ -14,9 +15,9 @@ function App() {
         <Route path="/survey" element={<Survey />} />
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/actions" element={<Actions />} />
+        <Route path="/results" element={<TestResults />} />
       </Routes>
     </Router>
   );
 }
-
 export default App;
