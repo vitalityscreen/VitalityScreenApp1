@@ -1,1 +1,105 @@
-body { font-family: sans-serif; margin: 20px; } nav ul { list-style: none; display: flex; gap: 10px; }
+/* index.css */
+body {
+  font-family: 'Segoe UI', sans-serif;
+  margin: 0;
+  background-color: #f8f8f8;
+  color: #333;
+}
+
+.app-container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 1rem;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  background-color: #ffffff;
+  border-bottom: 2px solid #f0882c;
+  padding: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.logo {
+  height: 50px;
+  margin-right: 1rem;
+}
+
+.title {
+  font-size: 1.8rem;
+  color: #f0882c;
+  margin: 0;
+}
+
+nav ul {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+nav ul li a {
+  text-decoration: none;
+  color: #333;
+  font-weight: bold;
+}
+
+nav ul li a:hover {
+  color: #f0882c;
+}
+
+main {
+  background: #fff;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+}
+
+button {
+  background-color: #f0882c;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  font-size: 1rem;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 1rem;
+}
+
+button:hover {
+  background-color: #d97706;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1rem;
+}
+
+.table th, .table td {
+  padding: 0.75rem;
+  border-bottom: 1px solid #ddd;
+  text-align: left;
+}
+
+.table th {
+  background-color: #f0882c;
+  color: white;
+}
+
+.risk-low {
+  color: green;
+  font-weight: bold;
+}
+
+.risk-medium {
+  color: orange;
+  font-weight: bold;
+}
+
+.risk-high {
+  color: red;
+  font-weight: bold;
+}
