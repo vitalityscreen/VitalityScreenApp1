@@ -6,13 +6,13 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// Example route
+// Test route
 app.get('/api/hello', (req, res) => {
-  res.json({ message: 'Hello from the backend!' });
+  res.json({ message: 'Hello from backend!' });
 });
 
-// Use the port provided by Render via environment variable
-const PORT = process.env.PORT || 10000;
+// ✅ FIXED: Use Render's PORT environment variable
+const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
