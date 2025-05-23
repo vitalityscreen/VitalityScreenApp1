@@ -1,6 +1,7 @@
+
 {
   "name": "vitalityscreen-server",
-  "version": "1.0.0",
+  "version": "3.0.0",
   "main": "server.js",
   "scripts": {
     "start": "node server.js"
