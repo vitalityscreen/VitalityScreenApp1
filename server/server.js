@@ -3,27 +3,28 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 
 const app = express();
+const PORT = process.env.PORT || 3001; // ✅ Use environment-assigned port, never a hardcoded URL
 
 // Middleware
 app.use(cors());
 app.use(bodyParser.json());
 
-// Simple test route
+// Test route
 app.get('/api/health', (req, res) => {
-  res.json({ status: 'Backend is working!' });
+  res.json({ status: 'Backend is running' });
 });
 
-// Add your API endpoints here
+// Example route
 app.post('/api/risk-assessment', (req, res) => {
-  // Placeholder: return a sample risk score
   const userData = req.body;
-  console.log('Received data:', userData);
-  res.json({ riskScore: 75, category: 'Medium' });
+  res.json({
+    riskScore: 42,
+    category: 'Medium',
+    received: userData
+  });
 });
 
-// Use the PORT provided by Render or default to 3000
-const PORT = process.env.PORT || 3000;
-
+// ✅ Start the server on the correct port
 app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
+  console.log(`Server running on port ${PORT}`);
 });
