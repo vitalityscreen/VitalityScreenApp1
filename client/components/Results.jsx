@@ -11,7 +11,7 @@ function Results() {
     <div>
       <h2>Your Personalized Risk Assessment</h2>
       <p><strong>Overall Health Score:</strong> {data.overallScore}</p>
-      <p><strong>Overall Risk Level:</strong> <span className={`risk-{data.overallRisk.toLowerCase()}`}>{data.overallRisk}</span></p>
+      <p><strong>Overall Risk Level:</strong> <span className={`risk-${data.overallRisk.toLowerCase()}`}>{data.overallRisk}</span></p>
       <table className="table">
         <thead>
           <tr>
@@ -25,7 +25,7 @@ function Results() {
           {data.results.map((item, index) => (
             <tr key={index}>
               <td>{item.disease}</td>
-              <td className={`risk-{item.riskLevel.toLowerCase()}`}>{item.riskLevel}</td>
+              <td className={`risk-${item.riskLevel.toLowerCase()}`}>{item.riskLevel}</td>
               <td>{item.recommendedTests.join(', ')}</td>
               <td>{item.actions.join(', ')}</td>
             </tr>
