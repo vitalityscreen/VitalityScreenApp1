@@ -1,23 +1,18 @@
 const express = require('express');
 const cors = require('cors');
-const bodyParser = require('body-parser');
-
 const app = express();
-const port = process.env.PORT || 3000; // ✅ Only a numeric port here
 
+// Middleware
 app.use(cors());
-app.use(bodyParser.json());
+app.use(express.json());
 
-app.get('/', (req, res) => {
-  res.send('✅ VitalityScreen backend is running!');
+// Example route
+app.get('/api/hello', (req, res) => {
+  res.json({ message: 'Hello from the backend!' });
 });
 
-app.post('/api/submit-survey', (req, res) => {
-  const data = req.body;
-  console.log('Received survey data:', data);
-  res.json({ success: true, message: 'Survey received', riskScore: 42 });
-});
-
-app.listen(port, () => {
-  console.log(`✅ Server running on port ${port}`);
+// Use the port provided by Render via environment variable
+const PORT = process.env.PORT || 10000;
+app.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}`);
 });
