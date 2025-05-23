@@ -1,23 +1,26 @@
+// App.jsx
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Navigation from './components/Navigation';
 import Survey from './components/Survey';
-import Dashboard from './components/Dashboard';
-import Actions from './components/Actions';
-import Login from './components/Login';
-import TestResults from './components/TestResults';
+import Results from './components/Results';
+import Header from './components/Header';
+import './index.css';
 
 function App() {
   return (
     <Router>
-      <Navigation />
-      <Routes>
-        <Route path="/" element={<Login />} />
-        <Route path="/survey" element={<Survey />} />
-        <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/actions" element={<Actions />} />
-        <Route path="/results" element={<TestResults />} />
-      </Routes>
+      <div className="app-container">
+        <Header />
+        <Navigation />
+        <main>
+          <Routes>
+            <Route path="/" element={<Survey />} />
+            <Route path="/results" element={<Results />} />
+          </Routes>
+        </main>
+      </div>
     </Router>
   );
 }
+
 export default App;
