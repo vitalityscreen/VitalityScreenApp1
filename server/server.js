@@ -8,75 +8,41 @@ const PORT = process.env.PORT || 3000;
 app.use(cors());
 app.use(bodyParser.json());
 
-const surveyQuestions = [
-  { id: "smoking", question: "Do you currently smoke?", category: "Lifestyle" },
-  { id: "alcohol", question: "Do you consume alcohol regularly?", category: "Lifestyle" },
-  { id: "exercise", question: "Do you exercise at least 3 times a week?", category: "Lifestyle" },
-  { id: "diet", question: "Is your diet high in processed or fast foods?", category: "Lifestyle" },
-  { id: "sleep", question: "Do you sleep fewer than 6 hours per night?", category: "Lifestyle" },
-  { id: "weight", question: "Is your BMI over 30 (obese)?", category: "Measurements" },
-  { id: "bp", question: "Have you ever had high blood pressure?", category: "Medical History" },
-  { id: "cholesterol", question: "Have you ever had high cholesterol?", category: "Medical History" },
-  { id: "diabetes", question: "Have you been diagnosed with diabetes or prediabetes?", category: "Medical History" },
-  { id: "asthma", question: "Have you been diagnosed with asthma or COPD?", category: "Medical History" },
-  { id: "heart_disease", question: "Have you been diagnosed with heart disease?", category: "Medical History" },
-  { id: "stroke", question: "Have you had a stroke or TIA?", category: "Medical History" },
-  { id: "cancer_history", question: "Have you ever been diagnosed with cancer?", category: "Medical History" },
-  { id: "family_diabetes", question: "Does a close family member have diabetes?", category: "Family History" },
-  { id: "family_heart", question: "Does a close family member have heart disease?", category: "Family History" },
-  { id: "family_cancer", question: "Does a close family member have cancer?", category: "Family History" },
-  { id: "family_stroke", question: "Family history of stroke or aneurysm?", category: "Family History" },
-  { id: "prostate", question: "Do you have a prostate?", category: "Sex-Specific" },
-  { id: "breast_check", question: "Do you regularly check your breasts or have mammograms?", category: "Sex-Specific" },
-  { id: "skin_changes", question: "Have you noticed new or changing moles or spots?", category: "Symptoms" },
-  { id: "fatigue", question: "Do you often feel chronically tired or fatigued?", category: "Symptoms" },
-  { id: "pain", question: "Do you regularly experience joint or muscle pain?", category: "Symptoms" },
-  { id: "urination", question: "Do you have frequent or painful urination?", category: "Symptoms" },
-  { id: "vision", question: "Have you experienced unexplained vision changes?", category: "Symptoms" },
-  { id: "hearing", question: "Have you experienced hearing loss or ringing?", category: "Symptoms" },
-  { id: "meds_bp", question: "Are you taking medication for blood pressure?", category: "Medications" },
-  { id: "meds_diabetes", question: "Are you taking medication for diabetes?", category: "Medications" },
-  { id: "meds_cholesterol", question: "Are you on statins or other cholesterol meds?", category: "Medications" },
-  { id: "lab_bp", question: "Was your last BP reading above 140/90?", category: "Test Results" },
-  { id: "lab_chol", question: "Was your last cholesterol test abnormal?", category: "Test Results" },
-  { id: "lab_hba1c", question: "Was your last HbA1c > 6.0?", category: "Test Results" }
+const diseaseMap = [  
+  { disease: "Heart Disease", triggers: ["smoking", "bp", "cholesterol", "weight", "family_heart"], tests: ["ECG", "Cholesterol panel"], actions: ["Quit smoking", "Exercise regularly", "Reduce sodium"] },
+  { disease: "Type 2 Diabetes", triggers: ["weight", "diet", "sleep", "family_diabetes", "lab_hba1c"], tests: ["HbA1c", "Fasting glucose"], actions: ["Limit sugar", "Track carbs", "Increase activity"] },
+  { disease: "Hypertension", triggers: ["bp", "weight", "cholesterol", "family_heart", "meds_bp"], tests: ["Blood pressure check"], actions: ["Lower salt intake", "Exercise", "Take prescribed medication"] },
+  { disease: "Chronic Kidney Disease", triggers: ["diabetes", "bp", "pain", "urination"], tests: ["eGFR", "Urine albumin"], actions: ["Control diabetes", "Limit NSAIDs", "Manage BP"] },
+  { disease: "Alzheimer's Disease", triggers: ["family_stroke", "vision", "hearing", "fatigue"], tests: ["Cognitive assessment"], actions: ["Stay mentally active", "Manage chronic conditions"] },
+  { disease: "COPD", triggers: ["smoking", "asthma", "family_heart"], tests: ["Pulmonary function test"], actions: ["Stop smoking", "Use inhalers as prescribed"] },
+  { disease: "Asthma", triggers: ["asthma", "family_heart", "pain"], tests: ["Spirometry"], actions: ["Avoid triggers", "Use controller medication"] },
+  { disease: "Arthritis", triggers: ["pain", "weight", "family_stroke"], tests: ["X-ray", "CRP"], actions: ["Exercise", "Anti-inflammatory diet"] },
+  { disease: "Osteoporosis", triggers: ["weight", "diet", "pain"], tests: ["DEXA scan"], actions: ["Calcium & Vitamin D", "Weight-bearing exercise"] },
+  { disease: "Obesity", triggers: ["diet", "exercise", "sleep"], tests: ["BMI", "Waist circumference"], actions: ["Healthy diet", "Daily physical activity"] },
+  { disease: "Liver Disease", triggers: ["alcohol", "weight", "diet"], tests: ["Liver function test"], actions: ["Reduce alcohol", "Low-fat diet"] },
+  { disease: "Lung Cancer", triggers: ["smoking", "cancer_history", "family_cancer"], tests: ["Low-dose CT"], actions: ["Quit smoking", "Annual screening"] },
+  { disease: "Breast Cancer", triggers: ["breast_check", "family_cancer", "cancer_history"], tests: ["Mammogram"], actions: ["Routine screening", "Breast self-exam"] },
+  { disease: "Prostate Cancer", triggers: ["prostate", "family_cancer", "cancer_history"], tests: ["PSA blood test"], actions: ["Discuss screening", "Healthy lifestyle"] },
+  { disease: "Colorectal Cancer", triggers: ["diet", "pain", "family_cancer"], tests: ["Colonoscopy"], actions: ["Screen regularly", "High-fiber diet"] },
+  { disease: "Pancreatic Cancer", triggers: ["smoking", "family_cancer", "diabetes"], tests: ["CT or MRI"], actions: ["Avoid tobacco", "Healthy diet"] },
+  { disease: "Skin Cancer", triggers: ["skin_changes", "cancer_history"], tests: ["Dermatology exam"], actions: ["Use sunscreen", "Annual skin checks"] },
+  { disease: "Depression", triggers: ["fatigue", "sleep", "pain"], tests: ["Mental health screening"], actions: ["Therapy", "Exercise", "Social support"] },
+  { disease: "Anxiety", triggers: ["fatigue", "sleep", "urination"], tests: ["Psychological eval"], actions: ["Mindfulness", "Counseling"] },
+  { disease: "Thyroid Disease", triggers: ["fatigue", "weight", "vision"], tests: ["TSH", "T3/T4"], actions: ["Manage meds", "Endocrinology consult"] },
+  { disease: "Cervical Cancer", triggers: ["family_cancer", "cancer_history"], tests: ["Pap smear", "HPV test"], actions: ["Routine screening", "Vaccination"] },
+  { disease: "Multiple Sclerosis", triggers: ["vision", "fatigue", "pain"], tests: ["MRI brain/spine"], actions: ["Neurology referral"] },
+  { disease: "Parkinson’s Disease", triggers: ["vision", "hearing", "pain"], tests: ["Neurological exam"], actions: ["Physical therapy", "Medication management"] },
+  { disease: "Gout", triggers: ["diet", "pain", "urination"], tests: ["Uric acid test"], actions: ["Reduce red meat", "Hydrate"] },
+  { disease: "Sleep Apnea", triggers: ["sleep", "weight", "fatigue"], tests: ["Sleep study"], actions: ["CPAP", "Weight loss"] },
+  { disease: "GERD", triggers: ["diet", "pain", "sleep"], tests: ["Endoscopy"], actions: ["Avoid trigger foods", "Elevate head while sleeping"] },
+  { disease: "Peptic Ulcer", triggers: ["pain", "diet", "alcohol"], tests: ["Upper GI scope"], actions: ["Antacids", "Avoid NSAIDs"] },
+  { disease: "Urinary Incontinence", triggers: ["urination", "pain", "weight"], tests: ["Urodynamic testing"], actions: ["Pelvic floor exercises", "Urology referral"] },
+  { disease: "Hearing Loss", triggers: ["hearing", "fatigue"], tests: ["Audiogram"], actions: ["Hearing aids", "ENT consult"] },
+  { disease: "Macular Degeneration", triggers: ["vision", "family_cancer"], tests: ["Ophthalmology exam"], actions: ["Eye vitamins", "Annual eye exams"] }
 ];
 
-const diseaseMap = [
-  {
-    disease: "Heart Disease",
-    triggers: ["smoking", "bp", "cholesterol", "weight", "family_heart"],
-    tests: ["ECG every 6 months", "Cholesterol panel annually"],
-    actions: ["Quit smoking", "30 min cardio daily", "Low-salt diet"]
-  },
-  {
-    disease: "Type 2 Diabetes",
-    triggers: ["weight", "diet", "sleep", "family_diabetes", "lab_hba1c"],
-    tests: ["HbA1c every 6 months", "Fasting glucose yearly"],
-    actions: ["Limit sugar", "Track carbs", "Walk daily"]
-  },
-  {
-    disease: "Stroke",
-    triggers: ["bp", "cholesterol", "smoking", "family_stroke"],
-    tests: ["Blood pressure monthly", "Cholesterol panel yearly"],
-    actions: ["Manage BP", "Exercise", "Avoid tobacco"]
-  },
-  {
-    disease: "Breast Cancer",
-    triggers: ["family_cancer", "breast_check", "cancer_history"],
-    tests: ["Mammogram every 2 years"],
-    actions: ["Self-exam monthly", "Routine checkups"]
-  },
-  {
-    disease: "Prostate Cancer",
-    triggers: ["prostate", "family_cancer", "cancer_history"],
-    tests: ["PSA test every 2 years"],
-    actions: ["Discuss screening with doctor", "Maintain healthy weight"]
-  }
-];
-
-app.get('/api/survey', (req, res) => {
-  res.json(surveyQuestions);
+app.get('/api/diseases', (req, res) => {
+  res.json(diseaseMap);
 });
 
 app.post('/api/risk', (req, res) => {
