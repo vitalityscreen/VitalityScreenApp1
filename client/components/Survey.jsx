@@ -44,7 +44,7 @@ export default function SurveyPage() {
 
   const handleSubmit = async () => {
     try {
-      const res = await fetch('https://vitalityscreenapp1-1-end.onrender.com/api/submit-survey', {
+      const res = await fetch('https://vitalityscreenapp1.onrender.com/api/submit-survey', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(answers),
