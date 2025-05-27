@@ -35,24 +35,38 @@ const surveyQuestions = [
 
 export default function SurveyPage() {
   const [answers, setAnswers] = useState({});
+  const [submitted, setSubmitted] = useState(false);
+  const [error, setError] = useState(null);
 
   const handleChange = (id, value) => {
     setAnswers(prev => ({ ...prev, [id]: value }));
   };
 
   const handleSubmit = async () => {
-    const res = await fetch('/api/submit-survey', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(answers),
-    });
-    const data = await res.json();
-    alert('Survey submitted! Check dashboard for results.');
+    try {
+      const res = await fetch('https://vitalityscreenapp1-1-end.onrender.com/api/submit-survey', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(answers),
+      });
+
+      if (!res.ok) {
+        throw new Error(`Server error: ${res.status}`);
+      }
+
+      const data = await res.json();
+      console.log('Survey result:', data);
+      setSubmitted(true);
+    } catch (err) {
+      console.error(err);
+      setError('Something went wrong submitting your survey.');
+    }
   };
 
   return (
     <div className="p-6 bg-white rounded-xl shadow-md max-w-3xl mx-auto mt-6">
       <h2 className="text-2xl font-bold mb-4">Chronic Disease Risk Survey</h2>
+
       {surveyQuestions.map(q => (
         <div key={q.id} className="mb-4">
           <label className="block mb-1">{q.question}</label>
@@ -67,12 +81,20 @@ export default function SurveyPage() {
           </select>
         </div>
       ))}
+
       <button
         onClick={handleSubmit}
         className="bg-orange-500 text-white px-4 py-2 rounded hover:bg-orange-600"
       >
         Submit
       </button>
+
+      {submitted && (
+        <p className="mt-4 text-green-600">Survey submitted! Check your dashboard for results.</p>
+      )}
+      {error && (
+        <p className="mt-4 text-red-600">{error}</p>
+      )}
     </div>
   );
 }
